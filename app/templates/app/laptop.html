@@ -1,0 +1,40 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Laptops{% endblock title %}
+
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+  <!-- કેટેગરી સાઈડબાર (જો રાખવો હોય તો) -->
+  <div class="col-sm-3">
+   <div class="list-group">
+     <a href="{% url 'laptop' %}" class="list-group-item list-group-item-action active" aria-current="true">All Laptops</a>
+    
+   </div>
+  </div>
+
+  
+  <div class="col-sm-9">
+   <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for prod in products %}
+     <div class="col">
+       <div class="card h-100 text-center shadow-sm">
+        
+         <div class="p-3" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+           <img src="{{ prod.product_image.url }}" class="card-img-top img-fluid" alt="{{ prod.title }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+         </div>
+         <div class="card-body">
+           <h5 class="card-title fw-bold">{{ prod.title }}</h5>
+           <p class="card-text text-danger fw-bold">Rs. {{ prod.discounted_price }} <small class="text-muted text-decoration-line-through">Rs. {{ prod.selling_price }}</small></p>
+           <a href="{% url 'product-detail' prod.id %}" class="btn btn-primary btn-sm">View Details</a>
+         </div>
+       </div>
+     </div>
+    {% empty %}
+     <p class="text-muted w-100 text-center">No Laptops Available at the moment.</p>
+    {% endfor %}
+   </div>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

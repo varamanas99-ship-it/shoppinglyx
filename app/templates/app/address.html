@@ -1,0 +1,67 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Address{% endblock title %}
+
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+ 
+  <div class="col-sm-2 border-end">
+    <h3 class="mb-3">Welcome <span class="text-capitalize">{{ request.user.username }}</span></h3>
+    <div class="d-grid gap-2">
+      <a href="{% url 'profile' %}" class="btn btn-outline-secondary rounded-pill fw-bold">Profile</a>
+      <a href="{% url 'address' %}" class="btn {{ active }} rounded-pill text-white fw-bold">Address</a>
+    </div>
+  </div>
+
+  
+  <div class="col-sm-9 offset-sm-1">
+    
+   
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      {% for a in add %}
+      <div class="col">
+        <div class="card shadow-sm border-0 rounded-3 h-100" style="background-color: #f8f9fa;">
+          <div class="card-body p-4 d-flex flex-column justify-content-between">
+            <div>
+              <h5 class="card-title text-primary fw-bold mb-3">Address {{ forloop.counter }}</h5>
+              <p class="mb-1"><strong>Name:</strong> {{ a.name }}</p>
+              <p class="mb-1"><strong>Address:</strong> {{ a.locality }}</p>
+              <p class="mb-1"><strong>City:</strong> {{ a.city }}</p>
+              <p class="mb-1"><strong>State:</strong> {{ a.state }}</p>
+              <p class="mb-3"><strong>Pin Code:</strong> {{ a.zipcode }}</p>
+            </div>
+            
+            
+            
+            <div class="text-end">
+              <a href="{% url 'editaddress' a.id %}" class="btn btn-warning btn-sm px-3 rounded-pill shadow-sm me-2 fw-bold text-dark">
+                Edit
+              </a>
+              <a href="{% url 'deleteaddress' a.id %}" class="btn btn-danger btn-sm px-3 rounded-pill shadow-sm" onclick="return confirm('Are you sure you want to delete this address?');">
+                Delete
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-12 text-center py-5">
+        <h3 class="text-muted mb-3">No Address Saved Yet!</h3>
+        <a href="{% url 'profile' %}" class="btn btn-primary px-4">Add New Address</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

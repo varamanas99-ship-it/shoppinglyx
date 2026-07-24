@@ -1,0 +1,68 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}My Orders{% endblock title %}
+
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+   <h3 class="mb-4 fw-bold text-center">My Orders</h3>
+   <div class="col-sm-10 offset-sm-1">
+     
+     {% for op in order_placed %}
+     <div class="card shadow-sm mb-3 border-0 rounded-3 p-3" style="background-color: #f8f9fa;">
+       <div class="row d-flex align-items-center">
+         <!-- પ્રોડક્ટ ઈમેજ -->
+         <div class="col-sm-2 text-center">
+           <img src="{{ op.product.product_image.url }}" alt="" class="img-fluid rounded" style="height: 80px; object-fit: contain;">
+         </div>
+         
+       
+         <div class="col-sm-6">
+           <h5 class="fw-bold mb-1">{{ op.product.title }}</h5>
+           <p class="text-muted small mb-1"><strong>Quantity:</strong> {{ op.quantity }}</p>
+         
+           <p class="text-primary fw-bold mb-0">Price: Rs. {{ op.product.discounted_price }}</p>
+         </div>
+         
+        
+         <div class="col-sm-4 text-end">
+           <p class="mb-1"><strong>Order Date:</strong> {{ op.ordered_date|date:"d M Y" }}</p>
+           <p class="mb-2">
+             <strong>Status:</strong> 
+             {% if op.status == 'Accepted' %}
+               <span class="badge bg-info">{{ op.status }}</span>
+             {% elif op.status == 'Packed' %}
+               <span class="badge bg-warning text-dark">{{ op.status }}</span>
+             {% elif op.status == 'On The Way' %}
+               <span class="badge bg-primary">{{ op.status }}</span>
+             {% elif op.status == 'Delivered' %}
+               <span class="badge bg-success">{{ op.status }}</span>
+             {% else %}
+               <span class="badge bg-secondary">{{ op.status }}</span>
+             {% endif %}
+           </p>
+
+         
+           {% if op.status != 'Delivered' %}
+             <div class="mt-2">
+               <a href="{% url 'cancelorder' op.id %}" 
+                  class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-semibold"
+                  onclick="return confirm('Are you sure you want to cancel this order?');">
+                  Cancel Order
+               </a>
+             </div>
+           {% endif %}
+         </div>
+       </div>
+     </div>
+     {% empty %}
+     <div class="text-center py-5">
+       <h4 class="text-muted">You haven't ordered anything yet!</h4>
+       <a href="{% url 'home' %}" class="btn btn-primary mt-3 px-4 rounded-pill">Explore Products</a>
+     </div>
+     {% endfor %}
+     
+   </div>
+ </div>
+</div>
+{% endblock main-content %}

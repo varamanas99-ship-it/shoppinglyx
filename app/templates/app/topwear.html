@@ -1,0 +1,128 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Top Wear{% endblock title %}
+
+{% block main-content %}
+
+<style>
+  .card-link {
+      text-decoration: none !important;
+      display: block;
+      color: initial;
+  }
+  .product-card-custom {
+      border: 1px solid rgba(0,0,0,0.125) !important;
+      border-radius: 12px !important;
+      background-color: #ffffff;
+      padding: 15px;
+      transition: all 0.3s ease-in-out !important;
+      height: 100%;
+      text-align: center;
+  }
+  /* 💡 હોવર કરવાથી બોર્ડર બ્લુ થશે અને શેડો આવશે */
+  .product-card-custom:hover {
+      border-color: #0d6efd !important;
+      box-shadow: 0 10px 20px rgba(13, 110, 253, 0.1) !important;
+  }
+  .product-img-container {
+      overflow: hidden;
+      position: relative;
+      border-radius: 8px;
+      height: 220px;
+      background-color: #fdfdfd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+  .product-img-container img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      transition: transform 0.4s ease-in-out !important;
+  }
+  .product-card-custom:hover .product-img-container img {
+      transform: scale(1.05);
+  }
+</style>
+
+<div class="container my-5">
+ <div class="row">
+
+  <div class="col-sm-3 border-end">
+   <div class="list-group shadow-sm mb-4">
+    <a href="{% url 'topwear' %}" class="list-group-item list-group-item-action fw-bold {% if not request.resolver_match.kwargs.data %}active{% endif %}">All Top Wear</a>
+    <a href="{% url 'topweardata' 'Lee' %}" class="list-group-item list-group-item-action {% if request.resolver_match.kwargs.data == 'Lee' %}active{% endif %}">Lee</a>
+    <a href="{% url 'topweardata' 'Wrangler' %}" class="list-group-item list-group-item-action {% if request.resolver_match.kwargs.data == 'Wrangler' %}active{% endif %}">Wrangler</a>
+    <a href="{% url 'topweardata' 'Raymond' %}" class="list-group-item list-group-item-action {% if request.resolver_match.kwargs.data == 'Raymond' %}active{% endif %}">Raymond</a>
+   </div>
+  </div>
+
+  
+  <div class="col-sm-9">
+   <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for product in topwear %}
+     <div class="col">
+      <a href="{% url 'product-detail' product.id %}" class="card-link">
+        <div class="card product-card-custom">
+         
+         <!-- ઈમેજ બોક્સ -->
+         <div class="product-img-container">
+          <img src="{{ product.product_image.url }}" alt="{{ product.title }}">
+         </div>
+         
+         <!-- વિગતો -->
+         <div class="card-body pt-3 pb-1 px-1">
+          <h6 class="fw-bold text-dark text-truncate mb-2" style="font-size: 0.95rem;">{{ product.title }}</h6>
+          <p class="text-muted small mb-2">{{ product.brand }}</p>
+          <div class="fw-bold text-primary mb-0" style="font-size: 1.05rem;">
+           Rs. {{ product.discounted_price }} 
+           <small class="text-decoration-line-through text-muted small ms-2 fw-normal">Rs. {{ product.selling_price }}</small>
+          </div>
+         </div>
+
+        </div>
+      </a>
+     </div>
+    {% empty %}
+     <div class="col-12 text-center py-5">
+      <h4 class="text-muted">No Top Wear available for this selection!</h4>
+     </div>
+    {% endfor %}
+   </div>
+  </div>
+ </div>
+</div>
+<footer class="py-5" style="background-color: #f8f9fa;">
+    <div class="container text-center">
+        <!-- Logo -->
+        <div class="mb-3">
+            <h3 class="fw-bold" style="color: #4a6741;">  </i>Shopping</h3>
+        </div>
+        
+        <!-- Text -->
+        <p class="text-muted mb-4" style="max-width: 600px; margin: 0 auto;">
+           ShoppingX – Everything You Need in One Place.
+Explore stylish fashion and the latest gadgets.
+Enjoy amazing offers, top quality, and fast delivery.
+Start shopping today!
+        </p>
+        
+        <!-- Social Icons -->
+        <div class="mb-4">
+            <a href="#" class="text-dark mx-2 h4"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-dark mx-2 h4"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-dark mx-2 h4"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-dark mx-2 h4"><i class="fab fa-youtube"></i></a>
+            <a href="#" class="text-dark mx-2 h4"><i class="fab fa-pinterest"></i></a>
+        </div>
+        
+        <hr>
+        
+        <!-- Copyright -->
+        <div class="text-muted">
+            <small>Designed By <strong>Vara Manas</strong></small><br>
+            <small>&copy; Copyright <strong>Coding</strong>. All Rights Reserved</small>
+        </div>
+    </div>
+</footer>
+{% endblock main-content %}

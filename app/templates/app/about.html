@@ -1,0 +1,58 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}About Us{% endblock title %}
+
+{% block main-content %}
+<div class="container my-5">
+    <div class="row align-items-center">
+       
+        <div class="col-md-6 mb-4 mb-md-0">
+            <img src="{% static 'app/images/banner/image.jpg' %}" alt="About ShoppingX" class="img-fluid rounded shadow-sm">
+        </div>
+
+      
+        <div class="col-md-6">
+            <h2 class="fw-bold text-primary mb-3">About ShoppingX</h2>
+            <p class="text-secondary" style="line-height: 1.8; font-size: 1.1rem;">
+                Welcome to our online shopping site! We offer top-quality products—such as mobile phones, laptops, and premium fashion wear—at very reasonable prices.
+            <p class="text-secondary" style="line-height: 1.8; font-size: 1.1rem;">
+                Our goal is to provide customers with excellent service and secure payment transactions. Thank you for joining us!
+            </p>
+            <a href="{% url 'contact' %}" class="btn btn-primary mt-3 fw-bold px-4">Contact Us</a>
+        </div>
+    </div>
+</div>
+<footer class="py-5" style="background-color: #f8f9fa;">
+    <div class="container text-center">
+        <!-- Logo -->
+        <div class="mb-3">
+            <h3 class="fw-bold" style="color: #4a6741;">  </i>Shopping</h3>
+        </div>
+        
+        <!-- Text -->
+        <p class="text-muted mb-4" style="max-width: 600px; margin: 0 auto;">
+           ShoppingX – Everything You Need in One Place.
+Explore stylish fashion and the latest gadgets.
+Enjoy amazing offers, top quality, and fast delivery.
+Start shopping today!
+        </p>
+        
+        <!-- Social Icons -->
+        <div class="mb-4">
+            <a href="#" class="text-dark mx-2 h4"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-dark mx-2 h4"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-dark mx-2 h4"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-dark mx-2 h4"><i class="fab fa-youtube"></i></a>
+            <a href="#" class="text-dark mx-2 h4"><i class="fab fa-pinterest"></i></a>
+        </div>
+        
+        <hr>
+        
+        <!-- Copyright -->
+        <div class="text-muted">
+            <small>Designed By <strong>Vara Manas</strong></small><br>
+            <small>&copy; Copyright <strong>Coding</strong>. All Rights Reserved</small>
+        </div>
+    </div>
+</footer>
+{% endblock main-content %}

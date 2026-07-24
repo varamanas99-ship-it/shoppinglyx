@@ -1,0 +1,47 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Login{% endblock title %}
+
+{% block main-content %}
+<div class="container my-5">
+ <div class="row justify-content-center">
+  <div class="col-sm-6 shadow p-5 bg-white rounded">
+   
+   <h3 class="mb-4 fw-bold">Login</h3>
+   <hr class="mb-4">
+
+   <form action="" method="post" novalidate>
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger my-3 small p-2">{{ error }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% for fm in form %}
+     <div class="mb-3 text-start">
+       <label class="form-label fw-normal mb-1">{{ fm.label_tag }}</label>
+       {{ fm }} 
+       <span class="text-danger small">{{ fm.errors|striptags }}</span>
+     </div>
+    {% endfor %}
+
+    
+    <div class="mb-3 text-start">
+        <a href="{% url 'password_reset' %}" class="text-decoration-none small">Forgot Password ?</a>
+    </div>
+
+    <div class="text-start mt-4">
+        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold">Login</button>
+    </div>
+
+    <div class="text-center mt-3 text-muted">
+       New to ShoppinglyX ? <a href="{% url 'customerregistration' %}" class="text-danger fw-semibold text-decoration-none">Create an Account</a>
+    </div>
+
+   </form>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

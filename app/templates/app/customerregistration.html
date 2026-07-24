@@ -1,0 +1,46 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Customer Registration{% endblock title %}
+
+{% block main-content %}
+<div class="container my-5">
+ <div class="row justify-content-center">
+  <div class="col-sm-6 shadow p-5 bg-white rounded">
+   <h3 class="mb-4 fw-bold">Customer Registration</h3>
+   <hr class="mb-4">
+   {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-success alert-dismissible fade show my-3 fw-semibold" role="alert" style="background-color: #d1e7dd; color: #0f5132; border-color: #badbcc;">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+   {% endif %}
+   <form action="" method="post" novalidate>
+    {% csrf_token %}
+    {% for fm in form %}
+     <div class="mb-3 text-start">
+       <label class="form-label fw-normal mb-1">{{ fm.label_tag }}</label>
+       {{ fm }} 
+       <span class="text-danger small">{{ fm.errors|striptags }}</span>
+     </div>
+    {% endfor %}
+    <div class="text-start mt-4">
+        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold">Submit</button>
+    </div>
+    <div class="text-center mt-3 text-muted">
+       Existing User ? <a href="{% url 'login' %}" class="text-danger fw-semibold text-decoration-none">Login Now</a>
+    </div>
+
+   </form>
+  </div>
+ </div>
+</div>
+<script>
+    document.querySelectorAll('input').forEach(function(el) {
+        if(el.type !== 'submit' && el.type !== 'hidden') {
+            el.classList.add('form-control');
+        }
+    });
+</script>
+{% endblock main-content %}

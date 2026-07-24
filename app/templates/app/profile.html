@@ -1,0 +1,55 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Profile{% endblock title %}
+
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+
+  <div class="col-sm-2 border-end">
+
+    <h3 class="mb-3">Welcome <span class="text-capitalize">{{ request.user.username }}</span></h3>
+    <div class="d-grid gap-2">
+      <a href="{% url 'profile' %}" class="btn {{ active }} rounded-pill text-white fw-bold">Profile</a>
+      <a href="{% url 'address' %}" class="btn btn-outline-secondary rounded-pill fw-bold">Address</a>
+    </div>
+  </div>
+
+  <div class="col-sm-8 offset-sm-1">
+  
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    
+    <form action="" method="post" novalidate class="shadow-sm p-4 bg-white rounded-3 border">
+      {% csrf_token %}
+      
+      {% for fm in form %}
+        <div class="mb-3">
+          <label class="form-label fw-semibold">{{ fm.label_tag }}</label>
+          {{ fm }}
+          <small class="text-danger">{{ fm.errors|striptags }}</small>
+        </div>
+      {% endfor %}
+
+      <div class="mt-4">
+        <button type="submit" class="btn btn-primary px-4 shadow">Submit</button>
+      </div>
+      
+  
+      {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+          <p class="alert alert-danger my-3">{{ error }}</p>
+        {% endfor %}
+      {% endif %}
+    </form>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

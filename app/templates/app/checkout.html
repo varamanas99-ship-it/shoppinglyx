@@ -1,0 +1,125 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Checkout{% endblock title %}
+{% block main-content %}
+<div class="container my-5">
+ <div class="row">
+ 
+  <div class="col-sm-6">
+    <h4 class="fw-bold">Order Summary</h4>
+    <hr>
+    
+    {% if product %}
+      <div class="card mb-3 shadow-sm border-0 rounded-3">
+        <div class="card-body">
+          <h5 class="fw-bold">Product: {{ product.title }}</h5>
+          
+          <!-- 🆕 અહીં પ્લસ અને માઇનસ બટનો ઉમેર્યા છે -->
+          <div class="my-3 d-flex align-items-center">
+            <label class="me-2 fw-semibold">Quantity:</label>
+            <a class="minus-cart btn p-1 text-secondary" pid="{{ product.id }}"><i class="fas fa-minus-square fa-lg"></i></a>
+            <span class="mx-2 fw-bold" id="quantity-{{ product.id }}">{{ quantity }}</span>
+            <a class="plus-cart btn p-1 text-primary" pid="{{ product.id }}"><i class="fas fa-plus-square fa-lg"></i></a>
+          </div> 
+
+          <p class="fw-bold text-primary mb-0" id="product-price-{{ product.id }}">Price: Rs. {% widthratio quantity 1 product.discounted_price %}</p>
+        </div>
+      </div>
+    {% else %}
+      {% for item in cart_items %}
+        <div class="card mb-3 shadow-sm border-0 rounded-3">
+          <div class="card-body">
+            <h5 class="fw-bold">Product: {{ item.product.title }}</h5>
+            
+            <div class="my-3 d-flex align-items-center">
+              <label class="me-2 fw-semibold">Quantity:</label>
+              <a class="minus-cart btn p-1 text-secondary" pid="{{ item.product.id }}"><i class="fas fa-minus-square fa-lg"></i></a>
+              <span class="mx-2 fw-bold" id="quantity-{{ item.product.id }}">{{ item.quantity }}</span>
+              <a class="plus-cart btn p-1 text-primary" pid="{{ item.product.id }}"><i class="fas fa-plus-square fa-lg"></i></a>
+            </div> 
+
+            <p class="fw-bold text-primary mb-0" id="product-price-{{ item.product.id }}">Price: Rs. {% widthratio item.quantity 1 item.product.discounted_price %}</p>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+    
+    <div class="alert alert-primary fw-bold fs-5 rounded-3 shadow-sm mt-3" role="alert">
+      Total Cost + Shipping Charges: <span id="totalamount">Rs. {{ totalamount }}</span>
+    </div>
+
+    <small class="text-muted d-block mt-4">
+      <strong>Terms and Conditions:</strong> Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, ullam saepe! Iure optio repellat dolor velit, minus rem.
+    </small>
+  </div>
+  
+  <div class="col-sm-5 offset-sm-1">
+    <h4 class="fw-bold">Select Shipping Address</h4>
+    <hr>
+    
+    <form action="/paymentdone" id="myform">
+      {% if product %}
+        <input type="hidden" name="prodid" value="{{ product.id }}">
+      {% endif %}
+      
+      {% if add %}
+        {% for a in add %}
+          <div class="card mb-3 shadow-sm border-0 rounded-3">
+            <div class="card-body d-flex align-items-start">
+              <input class="form-check-input mt-1 me-3" type="radio" name="custid" id="custid{{ forloop.counter }}" value="{{ a.id }}" required>
+              <label class="form-check-label" for="custid{{ forloop.counter }}">
+                <h5 class="fw-bold mb-1">{{ a.name }}</h5>
+                <p class="text-muted mb-0">
+                  {{ a.locality }}, {{ a.city }}, {{ a.state }} - <strong>{{ a.zipcode }}</strong>
+                </p>
+              </label>
+            </div>
+          </div>
+        {% endfor %}
+        
+        <div class="d-grid gap-2 mt-4">
+          <button type="submit" class="btn btn-warning btn-lg fw-bold rounded-pill shadow-sm">Confirm Order & Pay</button>
+        </div>
+      {% else %}
+        <div class="text-center py-4 bg-light rounded-3 shadow-sm border">
+          <p class="text-muted mb-3">No address found in your profile!</p>
+          <a href="{% url 'profile' %}" class="btn btn-primary fw-bold rounded-pill px-4">Add New Address</a>
+        </div>
+      {% endif %}
+    </form>
+  </div>
+ </div>
+</div>
+
+<!-- 🆕 AJAX સ્ક્રિપ્ટ જેથી ચેકઆઉટ પેજ પર પણ પ્લસ-માઇનસ કામ કરે -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $('.plus-cart').click(function(){
+      var id = $(this).attr("pid").toString();
+      $.ajax({
+          type: "GET",
+          url: "/pluscart/", 
+          data: { prod_id: id },
+          success: function(data){
+              document.getElementById("quantity-" + id).innerText = data.quantity;
+              document.getElementById("product-price-" + id).innerText = "Price: Rs. " + data.product_total;
+              document.getElementById("totalamount").innerText = "Rs. " + data.totalamount;
+          }
+      })
+  });
+
+  $('.minus-cart').click(function(){
+      var id = $(this).attr("pid").toString();
+      $.ajax({
+          type: "GET",
+          url: "/minuscart/", 
+          data: { prod_id: id },
+          success: function(data){
+              document.getElementById("quantity-" + id).innerText = data.quantity;
+              document.getElementById("product-price-" + id).innerText = "Price: Rs. " + data.product_total;
+              document.getElementById("totalamount").innerText = "Rs. " + data.totalamount;
+          }
+      })
+  });
+</script>
+{% endblock main-content %}
