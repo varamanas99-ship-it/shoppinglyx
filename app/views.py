@@ -434,3 +434,4 @@ def delete_review(request, id):
     review.delete()
     messages.success(request, 'તમારો રિવ્યુ ડીલીટ થઈ ગયો છે!')
     return redirect('review')
+

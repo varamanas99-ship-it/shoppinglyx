@@ -40,6 +40,20 @@ CATEGORY_CHOICES = (
     ('BW', 'Bottom Wear')
 )
 
+# ==================== 🆕 BRAND CHOICES ADDED ==================== #
+BRAND_CHOICES = (
+    ('iphone', 'iphone'),
+    ('Samsung', 'Samsung'),
+    ('GooglePixel', 'GooglePixel'),
+    ('Apple', 'Apple'),
+    ('Hp', 'Hp'),
+    ('Dell', 'Dell'),
+    ('Lee', 'Lee'),
+    ('Wrangler', 'Wrangler'),
+    ('Spykar', 'Spykar'),
+    ('Raymond', 'Raymond'),
+)
+
 class Customer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
@@ -56,7 +70,7 @@ class Product(models.Model):
     selling_price = models.FloatField()
     discounted_price = models.FloatField()
     description = models.TextField()
-    brand = models.CharField(max_length=100)
+    brand = models.CharField(choices=BRAND_CHOICES, max_length=100)
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
     product_image = models.ImageField(upload_to='productimg')
 
