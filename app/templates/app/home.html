@@ -16,10 +16,32 @@
       object-fit: cover !important;
   }
 
+  /* --- NAVBAR BUTTON & LINKS ANIMATION --- */
+  .navbar-nav .nav-link, .navbar .dropdown-toggle, .btn-cart-animation {
+      transition: all 0.3s ease-in-out !important;
+      border-radius: 5px;
+  }
+
+  /* Navbar links hover effect */
+  .navbar-nav .nav-link:hover, .navbar .dropdown-toggle:hover {
+      transform: translateY(-2px);
+      color: #4a6741 !important;
+  }
+
+  /* Cart Button Hover Animation */
+  .cart-btn-custom {
+      transition: all 0.3s ease-in-out !important;
+  }
+
+  .cart-btn-custom:hover {
+      transform: scale(1.08);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
   /* --- GALLERY ANIMATION & DARK SHADOW STYLING --- */
   .gallery-img-wrapper {
       overflow: hidden;
-      border-radius: 0.375rem; /* Bootstrap rounded class jevu */
+      border-radius: 0.375rem; 
       transition: transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
   }
 
@@ -29,10 +51,22 @@
 
   .gallery-img-wrapper:hover {
       transform: scale(1.03);
-      /* Dark black shadow */
       box-shadow: 0 20px 35px rgba(0, 0, 0, 0.6); 
   }
 </style>
+
+<!-- Note: Jo tamaro Cart button base.html ma hoy, to tame aej class ne base.html ma pan use kari shako cho -->
+<script>
+  // Automatically Cart button par animation class add karva mate
+  document.addEventListener("DOMContentLoaded", function() {
+      let cartElements = document.querySelectorAll("a[href*='cart'], .cart-link, .btn");
+      cartElements.forEach(el => {
+          if(el.innerText.includes("Cart") || el.innerHTML.includes("fa-shopping-cart")) {
+              el.classList.add("cart-btn-custom");
+          }
+      });
+  });
+</script>
 
 <div class="container-fluid p-0 m-0 carousel-container-custom">
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">

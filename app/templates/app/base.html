@@ -48,6 +48,7 @@
         .navbar-nav .nav-link { color: #000000 !important; font-weight: bold; }
         .navbar-brand { color: #000000 !important; }
 
+        /* Hover effect mate aa code update karyo che */
         @media (min-width: 992px) {
             .custom-dropdown:hover .dropdown-menu { display: block; margin-top: 0; }
         }
@@ -89,10 +90,11 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About Us</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact Us</a></li>
                 </ul>
-                                
+                                    
                 <ul class="navbar-nav mb-2 mb-lg-0 me-3">
                     {% if request.user.is_authenticated %}
-                    <li class="nav-item dropdown mx-2">
+                    <!-- Ahiya custom-dropdown class add karyo che jethi Manas button par hover thata menu khule -->
+                    <li class="nav-item dropdown custom-dropdown mx-2">
                         <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown">{{ request.user.username|capfirst }}</a>
                         <ul class="dropdown-menu shadow border-0">
                             <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
