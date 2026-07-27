@@ -5,6 +5,11 @@
 {% block banner_slider %}
 
 <style>
+  /* Navbar ane banner vache no gap hatavva mate */
+  .carousel-container-custom {
+      margin-top: -24px !important; 
+  }
+
   .carousel-item img {
       width: 100% !important;
       height: 750px !important; 
@@ -24,12 +29,12 @@
 
   .gallery-img-wrapper:hover {
       transform: scale(1.03);
-      /* Ahiya dark black shadow add karyo che */
+      /* Dark black shadow */
       box-shadow: 0 20px 35px rgba(0, 0, 0, 0.6); 
   }
 </style>
 
-<div class="container-fluid p-0 m-0">
+<div class="container-fluid p-0 m-0 carousel-container-custom">
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
