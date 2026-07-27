@@ -73,7 +73,6 @@ class CustomerLoginView(LoginView):
     authentication_form = LoginForm
     redirect_authenticated_user = True
 
-    # Admin login thay etle seedho admin panel par redirect karva mate
     def get_success_url(self):
         user = self.request.user
         if user.is_superuser or user.is_staff:
@@ -196,48 +195,68 @@ def show_cart(request):
 def plus_cart(request):
     if request.method == 'GET':
         prod_id = request.GET['prod_id']
-        c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
-        c.quantity += 1
-        c.save()
-        amount = 0.0
-        shipping_amount = 70.0
-        cart_product = [p for p in Cart.objects.filter(user=request.user)]
-        for p in cart_product:
-            amount += (p.quantity * p.product.discounted_price)
-        
-        product_total = c.quantity * c.product.discounted_price
+        try:
+            c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
+            c.quantity += 1
+            c.save()
+            
+            amount = 0.0
+            shipping_amount = 70.0
+            cart_product = Cart.objects.filter(user=request.user)
+            for p in cart_product:
+                amount += (p.quantity * p.product.discounted_price)
+            
+            product_total = c.quantity * c.product.discounted_price
 
-        data = {
-            'quantity': c.quantity, 
-            'amount': amount, 
-            'totalamount': amount + shipping_amount,
-            'product_total': product_total
-        }
-        return JsonResponse(data)
+            data = {
+                'quantity': c.quantity, 
+                'amount': amount, 
+                'totalamount': amount + shipping_amount,
+                'product_total': product_total
+            }
+            return JsonResponse(data)
+        except Cart.DoesNotExist:
+            product = Product.objects.get(id=prod_id)
+            data = {
+                'quantity': 1,
+                'product_total': product.discounted_price,
+                'totalamount': product.discounted_price + 70.0
+            }
+            return JsonResponse(data)
 
 
 def minus_cart(request):
     if request.method == 'GET':
         prod_id = request.GET['prod_id']
-        c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
-        if c.quantity > 1:
-            c.quantity -= 1
-            c.save()
-        amount = 0.0
-        shipping_amount = 70.0
-        cart_product = [p for p in Cart.objects.filter(user=request.user)]
-        for p in cart_product:
-            amount += (p.quantity * p.product.discounted_price)
-        
-        product_total = c.quantity * c.product.discounted_price
+        try:
+            c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
+            if c.quantity > 1:
+                c.quantity -= 1
+                c.save()
+            
+            amount = 0.0
+            shipping_amount = 70.0
+            cart_product = Cart.objects.filter(user=request.user)
+            for p in cart_product:
+                amount += (p.quantity * p.product.discounted_price)
+            
+            product_total = c.quantity * c.product.discounted_price
 
-        data = {
-            'quantity': c.quantity, 
-            'amount': amount, 
-            'totalamount': amount + shipping_amount,
-            'product_total': product_total
-        }
-        return JsonResponse(data)
+            data = {
+                'quantity': c.quantity, 
+                'amount': amount, 
+                'totalamount': amount + shipping_amount,
+                'product_total': product_total
+            }
+            return JsonResponse(data)
+        except Cart.DoesNotExist:
+            product = Product.objects.get(id=prod_id)
+            data = {
+                'quantity': 1,
+                'product_total': product.discounted_price,
+                'totalamount': product.discounted_price + 70.0
+            }
+            return JsonResponse(data)
 
 
 def remove_cart(request):
@@ -342,7 +361,7 @@ def checkout(request):
     product_id = request.GET.get('prod_id')
     if product_id:
         product = Product.objects.get(id=product_id)
-        quantity = 1  # Buy now mate default quantity 1
+        quantity = 1  
         amount = product.discounted_price * quantity
         return render(request, 'app/checkout.html', {
             'add': add, 
@@ -369,15 +388,18 @@ def checkout(request):
 @login_required
 def payment_done(request):
     user = request.user
-    cust_id = request.GET.get('custid')
-    product_id = request.GET.get('prodid') 
+    cust_id = request.POST.get('custid') or request.GET.get('custid')
+    product_id = request.POST.get('prodid') or request.GET.get('prodid') 
+    
     if not cust_id:
         messages.warning(request, "Please add or select a delivery address first!")
         return redirect('checkout')
+        
     try:
         customer = Customer.objects.get(id=cust_id)
     except Customer.DoesNotExist:
         return redirect('checkout')
+        
     if product_id:
         product = Product.objects.get(id=product_id)
         OrderPlaced(user=user, customer=customer, product=product, quantity=1, status='Pending').save()
@@ -386,6 +408,7 @@ def payment_done(request):
         for c in cart:
             OrderPlaced(user=user, customer=customer, product=c.product, quantity=c.quantity, status='Pending').save()
             c.delete() 
+            
     messages.success(request, "Congratulations!! Your Order Placed Successfully")
     return redirect("orders")
 
@@ -434,4 +457,3 @@ def delete_review(request, id):
     review.delete()
     messages.success(request, 'તમારો રિવ્યુ ડીલીટ થઈ ગયો છે!')
     return redirect('review')
-

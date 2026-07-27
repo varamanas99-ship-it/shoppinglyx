@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import Customer 
+from .models import Customer, Product 
 
 class CustomerRegistrationForm(UserCreationForm):
     password1 = forms.CharField(
@@ -93,8 +93,6 @@ class MySetPasswordForm(SetPasswordForm):
 
 
 # ==========================================================
-
-# ==========================================================
 class CustomerProfileForm(forms.ModelForm):
     STATE_CHOICES = (
         ('', 'Choose...'),
@@ -150,3 +148,26 @@ class CustomerProfileForm(forms.ModelForm):
             'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter City'}),
             'zipcode': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter Zip'}),
         }
+
+
+# ==========================================================
+# એડમિન પેનલમાં પ્રોડક્ટ એડ કરતી વખતે કેટેગરી મુજબ બ્રાન્ડ વેલિડેટ કરવા માટે
+# ==========================================================
+class ProductAdminForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+    def clean(self):
+        cleaned_data = super().clean()
+        category = cleaned_data.get("category")
+        brand = cleaned_data.get("brand")
+
+        # જો તમે કેટેગરી મોબાઈલ પસંદ કરી હોય અને બ્રાન્ડ લેપટોપ કે બીજા ક્લોધિંગની સિલેક્ટ કરી હોય તો એરર આપશે
+        mobile_brands = ['iphone', 'Samsung', 'GooglePixel', 'Apple']
+        
+        # નોંધ: તમારા ડેટાબેઝમાં બ્રાન્ડના નામ જે રીતે સેવ હોય તે મુજબ અહીં ચકાસી લેવું
+        if category == 'M' and brand and str(brand) not in mobile_brands:
+            raise ValidationError("મોબાઈલ કેટેગરી માટે માત્ર મોબાઈલ બ્રાન્ડ જ પસંદ કરો!")
+        
+        return cleaned_data

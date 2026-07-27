@@ -101,13 +101,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# ભારતીય ટાઇમ ઝોન અને યુઝ ટીઝેડ સેટ કર્યું છે
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -116,7 +117,7 @@ USE_TZ = True
 import os 
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'app/static')] # આ લાઈન ઉમેરો
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'app/static')] 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

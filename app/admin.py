@@ -2,16 +2,34 @@ from django.contrib import admin
 from django import forms
 from .models import Customer, Product, ProductImage, Cart, OrderPlaced
 
-# 1. Admin Form banavo je category mutabik brands filter kare
 class ProductAdminForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # By default badhi brands rakho, baaki tame admin ma data save karso tyare validation thi handle thase
-        # Je thi JavaScript vagar direct options manage thay
+    def clean(self):
+        cleaned_data = super().clean()
+        category = cleaned_data.get("category")
+        brand = cleaned_data.get("brand")
+
+        # કેટેગરી મુજબની સાચી બ્રાન્ડ્સની યાદી
+        mobile_brands = ['iphone', 'Samsung', 'GooglePixel']
+        laptop_brands = ['Apple', 'Hp', 'Dell']
+        topwear_brands = ['Lee', 'Wrangler', 'Raymond']
+        bottomwear_brands = ['Lee', 'Wrangler', 'Spykar']
+
+        # વેલિડેશન ચેક (ખોટી બ્રાન્ડ હશે તો સેવ નહીં થવા દે અને એરર આપશે)
+        if category == 'M' and brand and str(brand) not in mobile_brands:
+            raise forms.ValidationError("મોબાઈલ કેટેગરી માટે માત્ર મોબાઈલ બ્રાન્ડ (iphone, Samsung, GooglePixel) જ પસંદ કરો!")
+        elif category == 'L' and brand and str(brand) not in laptop_brands:
+            raise forms.ValidationError("લેપટોપ કેટેગરી માટે માત્ર લેપટોપ બ્રાન્ડ (Apple, Hp, Dell) જ પસંદ કરો!")
+        elif category == 'TW' and brand and str(brand) not in topwear_brands:
+            raise forms.ValidationError("ટૉપવેર કેટેગરી માટે યોગ્ય બ્રાન્ડ પસંદ કરો!")
+        elif category == 'BW' and brand and str(brand) not in bottomwear_brands:
+            raise forms.ValidationError("બૉટમવેર કેટેગરી માટે યોગ્ય બ્રાન્ડ પસંદ કરો!")
+            
+        return cleaned_data
+
 
 @admin.register(Customer)
 class CustomerModelAdmin(admin.ModelAdmin):
@@ -24,7 +42,7 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductModelAdmin(admin.ModelAdmin):
-    form = ProductAdminForm  # Ahiya form connect karyo
+    form = ProductAdminForm  
     list_display = ['id', 'title', 'selling_price', 'discounted_price', 'description', 'category', 'brand', 'product_image']
     inlines = [ProductImageInline]  
     fields = ['title', 'selling_price', 'discounted_price', 'description', 'category', 'brand', 'product_image']
