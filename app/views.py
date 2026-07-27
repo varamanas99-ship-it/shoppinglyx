@@ -73,6 +73,13 @@ class CustomerLoginView(LoginView):
     authentication_form = LoginForm
     redirect_authenticated_user = True
 
+    # Admin login thay etle seedho admin panel par redirect karva mate
+    def get_success_url(self):
+        user = self.request.user
+        if user.is_superuser or user.is_staff:
+            return '/admin/'
+        return reverse_lazy('home')
+
 
 class CustomerLogoutView(LogoutView):
     next_page = 'login'  
@@ -331,10 +338,11 @@ def checkout(request):
     totalitem = 0
     if request.user.is_authenticated:
         totalitem = Cart.objects.filter(user=user).count()
+        
     product_id = request.GET.get('prod_id')
     if product_id:
         product = Product.objects.get(id=product_id)
-        quantity = 1  # Buy now માટે ડિફોલ્ટ ક્વોન્ટિટી 1
+        quantity = 1  # Buy now mate default quantity 1
         amount = product.discounted_price * quantity
         return render(request, 'app/checkout.html', {
             'add': add, 
@@ -345,9 +353,11 @@ def checkout(request):
         })
     else:
         cart_items = Cart.objects.filter(user=user)
-        if not cart_items: return redirect('showcart')
+        if not cart_items: 
+            return redirect('showcart')
         amount = 0.0
-        for p in cart_items: amount += (p.quantity * p.product.discounted_price)
+        for p in cart_items: 
+            amount += (p.quantity * p.product.discounted_price)
         return render(request, 'app/checkout.html', {
             'add': add, 
             'cart_items': cart_items, 
@@ -424,31 +434,3 @@ def delete_review(request, id):
     review.delete()
     messages.success(request, 'તમારો રિવ્યુ ડીલીટ થઈ ગયો છે!')
     return redirect('review')
-
-@login_required
-def checkout(request):
-    user = request.user
-    add = Customer.objects.filter(user=user)
-    totalitem = 0
-    if request.user.is_authenticated:
-        totalitem = Cart.objects.filter(user=user).count()
-        
-    product_id = request.GET.get('prod_id')
-    if product_id:
-        product = Product.objects.get(id=product_id)
-        cart_item, created = Cart.objects.get_or_create(user=user, product=product)
-        
-    cart_items = Cart.objects.filter(user=user)
-    if not cart_items: 
-        return redirect('showcart')
-        
-    amount = 0.0
-    for p in cart_items: 
-        amount += (p.quantity * p.product.discounted_price)
-        
-    return render(request, 'app/checkout.html', {
-        'add': add, 
-        'cart_items': cart_items, 
-        'totalamount': amount + 70.0, 
-        'totalitem': totalitem
-    })
