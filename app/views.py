@@ -455,5 +455,5 @@ def review(request):
 def delete_review(request, id):
     review = get_object_or_404(CustomerReview, pk=id, user=request.user)
     review.delete()
-    messages.success(request, 'તમારો રિવ્યુ ડીલીટ થઈ ગયો છે!')
+    messages.success(request, 'Your review has been deleted!s')
     return redirect('review')

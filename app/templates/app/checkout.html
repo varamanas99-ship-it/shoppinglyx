@@ -22,7 +22,7 @@
             <a class="plus-cart btn p-1 text-primary" pid="{{ product.id }}"><i class="fas fa-plus-square fa-lg"></i></a>
           </div> 
 
-          <p class="fw-bold text-primary mb-0" id="product-price-{{ product.id }}">Price: Rs. {% widthratio quantity 1 product.discounted_price %}</p>
+          <p class="fw-bold text-primary mb-0" id="product-price-{{ product.id }}">MRP: {% widthratio quantity 1 product.discounted_price %}</p>
         </div>
       </div>
     {% else %}
@@ -38,7 +38,7 @@
               <a class="plus-cart btn p-1 text-primary" pid="{{ item.product.id }}"><i class="fas fa-plus-square fa-lg"></i></a>
             </div> 
 
-            <p class="fw-bold text-primary mb-0" id="product-price-{{ item.product.id }}">Price: Rs. {% widthratio item.quantity 1 item.product.discounted_price %}</p>
+            <p class="fw-bold text-primary mb-0" id="product-price-{{ item.product.id }}">MRP: {% widthratio item.quantity 1 item.product.discounted_price %}</p>
           </div>
         </div>
       {% endfor %}
@@ -107,7 +107,7 @@
           data: { prod_id: id },
           success: function(data){
               document.getElementById("quantity-" + id).innerText = data.quantity;
-              document.getElementById("product-price-" + id).innerText = "Price: Rs. " + data.product_total;
+              document.getElementById("product-price-" + id).innerText = "MRP: " + data.product_total;
               document.getElementById("totalamount").innerText = "Rs. " + data.totalamount;
           }
       })
@@ -121,7 +121,7 @@
           data: { prod_id: id },
           success: function(data){
               document.getElementById("quantity-" + id).innerText = data.quantity;
-              document.getElementById("product-price-" + id).innerText = "Price: Rs. " + data.product_total;
+              document.getElementById("product-price-" + id).innerText = "MRP: " + data.product_total;
               document.getElementById("totalamount").innerText = "Rs. " + data.totalamount;
           }
       })
