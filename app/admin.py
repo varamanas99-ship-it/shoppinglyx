@@ -12,7 +12,7 @@ class ProductAdminForm(forms.ModelForm):
         category = cleaned_data.get("category")
         brand = cleaned_data.get("brand")
 
-        # કેટેગરી મુજબની સાચી બ્રાન્ડ્સની યાદી
+    
         mobile_brands = ['iphone', 'Samsung', 'GooglePixel']
         laptop_brands = ['Apple', 'Hp', 'Dell']
         topwear_brands = ['Lee', 'Wrangler', 'Raymond']
