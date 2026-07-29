@@ -10,10 +10,43 @@
       margin-top: -24px !important; 
   }
 
+  /* બેનર ઈમેજ આખી સ્ક્રીનમાં ફિટ કરવા માટેનો પરફેક્ટ કોડ */
   .carousel-item img {
-      width: 100% !important;
-      height: 750px !important; 
+      width: 100vw !important;
+      height: 1000px !important; 
       object-fit: cover !important;
+      object-position: center !important;
+  }
+
+  /* મોબાઈલ સ્ક્રીન માટે બેનર હાઈટ */
+  @media (max-width: 768px) {
+      .carousel-item img {
+          height: 300px !important;
+      }
+  }
+
+  /* --- 4 FEATURES BOX ANIMATION (જેની તમે માંગણી કરી હતી) --- */
+  .feature-box {
+      background: #ffffff;
+      padding: 20px 10px;
+      border-radius: 12px;
+      transition: all 0.4s ease-in-out;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  }
+
+  .feature-box:hover {
+      transform: translateY(-8px); /* માઉસ લઈ જવાથી બોક્સ ઉપર જશે */
+      box-shadow: 0 12px 25px rgba(74, 103, 65, 0.2); /* સરસ શેડો આવશે */
+      background-color: #f9fbf9;
+  }
+
+  .feature-box img {
+      transition: transform 0.4s ease-in-out;
+  }
+
+  .feature-box:hover img {
+      transform: scale(1.15); /* આઇકન ઝૂમ થશે */
   }
 
   /* --- NAVBAR BUTTON & LINKS ANIMATION --- */
@@ -55,7 +88,6 @@
   }
 </style>
 
-<!-- Note: Jo tamaro Cart button base.html ma hoy, to tame aej class ne base.html ma pan use kari shako cho -->
 <script>
   // Automatically Cart button par animation class add karva mate
   document.addEventListener("DOMContentLoaded", function() {
@@ -72,10 +104,9 @@
     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img src="{% static 'app/images/banner/image3.jpg' %}" class="d-block w-100" alt="Banner 1"> 
+          <img src="{% static 'app/images/banner/image3.jpg' %}" class="d-block w-100 img-fluid" alt="Banner 1"> 
         </div>
       </div>
-      <!-- Controls -->
     </div>
 </div>
 {% endblock banner_slider %}
@@ -84,54 +115,62 @@
 {% endblock livesale %}
 
 {% block main-content %}
-<!-- Features Section -->
-<div class="container my-0 py-0" style="background-color: #ffffff; border-radius: 10px;">
+<!-- Features Section with Animation -->
+<div class="container my-4">
     <div class="row text-center">
         <!-- Free Delivery -->
         <div class="col-lg-3 col-6 mb-3">
-            <img src="{% static 'app/images/banner/freedeliver.jpg' %}" alt="Free Delivery" style="width: 40px; height: auto;">
-            <h6 class="mt-2 fw-bold text-dark">Free Delivery</h6>
+            <div class="feature-box">
+                <img src="{% static 'app/images/banner/freedeliver.jpg' %}" alt="Free Delivery" style="width: 45px; height: auto;">
+                <h6 class="mt-3 fw-bold text-dark">Free Delivery</h6>
+            </div>
         </div>
         <!-- Support 24/7 -->
         <div class="col-lg-3 col-6 mb-3">
-            <img src="{% static 'app/images/banner/service.jpg' %}" alt="Support 24/7" style="width: 40px; height: auto;">
-            <h6 class="mt-2 fw-bold text-dark">Support 24/7</h6>
+            <div class="feature-box">
+                <img src="{% static 'app/images/banner/service.jpg' %}" alt="Support 24/7" style="width: 45px; height: auto;">
+                <h6 class="mt-3 fw-bold text-dark">Support 24/7</h6>
+            </div>
         </div>
         <!-- 30 Day Return -->
         <div class="col-lg-3 col-6 mb-3">
-            <img src="{% static 'app/images/banner/return.png' %}" alt="30 Day Return" style="width: 40px; height: auto;">
-            <h6 class="mt-2 fw-bold text-dark">30 Day Return</h6>
+            <div class="feature-box">
+                <img src="{% static 'app/images/banner/return.png' %}" alt="30 Day Return" style="width: 45px; height: auto;">
+                <h6 class="mt-3 fw-bold text-dark">30 Day Return</h6>
+            </div>
         </div>
         <!-- Secure Shopping -->
         <div class="col-lg-3 col-6 mb-3">
-            <img src="{% static 'app/images/banner/secure.png' %}" alt="Secure Shopping" style="width: 40px; height: auto;">
-            <h6 class="mt-2 fw-bold text-dark">Secure Shopping</h6>
+            <div class="feature-box">
+                <img src="{% static 'app/images/banner/secure.png' %}" alt="Secure Shopping" style="width: 45px; height: auto;">
+                <h6 class="mt-3 fw-bold text-dark">Secure Shopping</h6>
+            </div>
         </div>
     </div>
+</div>
     
-    <!-- OUR GALLERY Section -->
-    <div class="container my-5">
-        <h2 class="text-center fw-bold mb-4" style="color: #4a6741;">OUR GALLERY</h2>
-        <div class="row">
-            <!-- Left Side: Large Image -->
-            <div class="col-md-6 mb-3">
-                <div class="gallery-img-wrapper">
-                    <img src="{% static 'app/images/banner/clothing.avif' %}" class="img-fluid rounded" alt="Large Gallery" style="width: 100%; height: 450px; object-fit: cover;">
-                </div>
+<!-- OUR GALLERY Section -->
+<div class="container my-5">
+    <h2 class="text-center fw-bold mb-4" style="color: #4a6741;">OUR GALLERY</h2>
+    <div class="row">
+        <!-- Left Side: Large Image -->
+        <div class="col-md-6 mb-3">
+            <div class="gallery-img-wrapper">
+                <img src="{% static 'app/images/banner/clothing.avif' %}" class="img-fluid rounded" alt="Large Gallery" style="width: 100%; height: 450px; object-fit: cover;">
             </div>
-            
-            <!-- Right Side: Two Small Images -->
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-12 mb-3">
-                        <div class="gallery-img-wrapper">
-                            <img src="{% static 'app/images/banner/moblie.jpg' %}" class="img-fluid rounded" alt="Small Gallery 1" style="width: 100%; height: 215px; object-fit: cover;">
-                        </div>
+        </div>
+        
+        <!-- Right Side: Two Small Images -->
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <div class="gallery-img-wrapper">
+                        <img src="{% static 'app/images/banner/moblie.jpg' %}" class="img-fluid rounded" alt="Small Gallery 1" style="width: 100%; height: 215px; object-fit: cover;">
                     </div>
-                    <div class="col-12">
-                        <div class="gallery-img-wrapper">
-                            <img src="{% static 'app/images/banner/cloting.jpg' %}" class="img-fluid rounded" alt="Small Gallery 2" style="width: 100%; height: 215px; object-fit: cover;">
-                        </div>
+                </div>
+                <div class="col-12">
+                    <div class="gallery-img-wrapper">
+                        <img src="{% static 'app/images/banner/cloting.jpg' %}" class="img-fluid rounded" alt="Small Gallery 2" style="width: 100%; height: 215px; object-fit: cover;">
                     </div>
                 </div>
             </div>
@@ -144,7 +183,7 @@
     <div class="container text-center">
         <!-- Logo -->
         <div class="mb-3">
-            <h3 class="fw-bold" style="color: #4a6741;">Shopping</h3>
+            <h3 class="fw-bold" style="color: #4a6741;">ShoppingX</h3>
         </div>
         
         <!-- Text -->
