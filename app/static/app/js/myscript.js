@@ -17,7 +17,7 @@
             }
         });
 
-        // 2. Admin Panel Brand Filter (Fixed version for Django Admin)
+        
         const brandsMap = {
             'M': ['iphone', 'Samsung', 'GooglePixel'],
             'L': ['Apple', 'Hp', 'Dell'],

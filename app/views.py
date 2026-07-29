@@ -158,6 +158,7 @@ def add_to_cart(request):
     product_id = request.GET.get('prod_id')
     if product_id:
         product = Product.objects.get(id=product_id)
+        # જો આ પ્રોડક્ટ પહેલેથી કાર્ટમાં હશે તો નવી રો બનવાને બદલે તેની ક્વોન્ટિટી વધી જશે
         cart_item, created = Cart.objects.get_or_create(user=user, product=product)
         if not created:
             cart_item.quantity += 1
@@ -278,9 +279,16 @@ def remove_cart(request):
 
 @login_required
 def buy_now(request):
+    user = request.user
     product_id = request.GET.get('prod_id')
     if product_id:
-        return redirect(f'/checkout/?prod_id={product_id}')
+        product = Product.objects.get(id=product_id)
+        # જો પ્રોડક્ટ પહેલેથી કાર્ટમાં હોય તો તેની ક્વોન્ટિટી એક વધારો અથવા એડ કરો
+        cart_item, created = Cart.objects.get_or_create(user=user, product=product)
+        if not created:
+            cart_item.quantity += 1
+            cart_item.save()
+        return redirect('checkout')
     return redirect('home')
 
 
@@ -384,7 +392,6 @@ def checkout(request):
             'totalitem': totalitem
         })
 
-
 @login_required
 def payment_done(request):
     user = request.user
@@ -402,7 +409,14 @@ def payment_done(request):
         
     if product_id:
         product = Product.objects.get(id=product_id)
-        OrderPlaced(user=user, customer=customer, product=product, quantity=1, status='Pending').save()
+        # અહીં ચેક કરીશું કે કાર્ટમાં આ પ્રોડક્ટની કેટલી ક્વોન્ટિટી છે
+        cart_item = Cart.objects.filter(user=user, product=product).first()
+        qty = cart_item.quantity if cart_item else 1
+        
+        OrderPlaced(user=user, customer=customer, product=product, quantity=qty, status='Pending').save()
+        
+        if cart_item:
+            cart_item.delete()
     else:
         cart = Cart.objects.filter(user=user)
         for c in cart:
@@ -455,5 +469,5 @@ def review(request):
 def delete_review(request, id):
     review = get_object_or_404(CustomerReview, pk=id, user=request.user)
     review.delete()
-    messages.success(request, 'Your review has been deleted!s')
+    messages.success(request, 'Your review has been deleted!')
     return redirect('review')
