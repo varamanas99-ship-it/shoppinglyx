@@ -63,7 +63,7 @@
                             <div class="d-flex justify-content-between align-items-center mt-2">
                                 <small class="text-muted" style="font-size: 11px;">{{ r.created_at|date:"d M Y" }}</small>
                                 {% if r.user == request.user %}
-                                    <a href="{% url 'delete-review' r.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('શું તમે ખરેખર આ રિવ્યુ ડીલીટ કરવા માંગો છો?')">Delete</a>
+                                    <a href="{% url 'delete-review' r.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Do you really want to delete this review?')">Delete</a>
                                 {% endif %}
                             </div>
                         </div>

@@ -101,7 +101,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-# ભારતીય ટાઇમ ઝોન અને યુઝ ટીઝેડ સેટ કર્યું છે
+
 TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
