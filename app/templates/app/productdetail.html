@@ -4,8 +4,8 @@
 {% block main-content %}
 <div class="container my-5">
  <div class="row">
-  <!-- ઇમેજ સ્લાઇડર સેક્શન -->
-  <div class="col-sm-6 text-center align-self-center">
+  <!-- ઇમેજ સ્લાઇડર સેક્શન (એનિમેશન ક્લાસ સાથે) -->
+  <div class="col-sm-6 text-center align-self-center product-fade-in">
     
     <div id="productImageSlider" class="carousel slide shadow rounded p-3 bg-white position-relative" data-bs-ride="carousel" data-bs-interval="false">
         
@@ -15,14 +15,12 @@
                 <img src="{{product.product_image.url}}" class="d-block w-100 rounded" alt="{{product.title}}" style="height: 400px; object-fit: contain;">
             </div>
             
-
             {% for pimg in product.product_images.all %}
             <div class="carousel-item">
                 <img src="{{pimg.image.url}}" class="d-block w-100 rounded" alt="{{product.title}}" style="height: 400px; object-fit: contain;">
             </div>
             {% endfor %}
         </div>
-
 
         <button class="carousel-control-prev" type="button" data-bs-target="#productImageSlider" data-bs-slide="prev" style="width: 40px; height: 40px; background-color: rgba(0,0,0,0.5); border-radius: 50%; top: 50%; transform: translateY(-50%); left: 10px; border: none; position: absolute;">
             <span class="carousel-control-prev-icon" aria-hidden="true" style="width: 20px; height: 20px;"></span>
@@ -32,13 +30,11 @@
             <span class="carousel-control-next-icon" aria-hidden="true" style="width: 20px; height: 20px;"></span>
             <span class="visually-hidden">Next</span>
         </button>
-
         
         <div class="carousel-indicators" style="position: relative; margin-top: 15px;">
             <!-- પહેલો ડોટ -->
             <button type="button" data-bs-target="#productImageSlider" data-bs-slide-to="0" class="active bg-dark rounded-circle" style="width: 10px; height: 10px;" aria-current="true" aria-label="Slide 1"></button>
             
-    
             {% for pimg in product.product_images.all %}
             <button type="button" data-bs-target="#productImageSlider" data-bs-slide-to="{{ forloop.counter }}" class="bg-dark rounded-circle" style="width: 10px; height: 10px;" aria-label="Slide {{ forloop.counter|add:1 }}"></button>
             {% endfor %}
@@ -48,22 +44,22 @@
 
   </div>
 
-  <!-- પ્રોડક્ટની માહિતી અને બટન્સ -->
-  <div class="col-sm-5 offset-sm-1">
+  <!-- પ્રોડક્ટની માહિતી અને બટન્સ (એનિમેશન ક્લાસ સાથે) -->
+  <div class="col-sm-5 offset-sm-1 product-slide-up">
    <h2 class="fw-bold">{{product.title}}</h2>
    <hr>
    <p class="text-muted fs-5">{{product.description}}</p> <br>
    <h4 class="fw-bold text-dark">
-     Rs. {{product.discounted_price}} 
-     <small class="fw-light text-decoration-line-through text-muted ms-2" style="font-size: 16px;">Rs. {{product.selling_price}}</small>
+      Rs. {{product.discounted_price}} 
+      <small class="fw-light text-decoration-line-through text-muted ms-2" style="font-size: 16px;">Rs. {{product.selling_price}}</small>
    </h4> <br>
    
    <form action="{% url 'add-to-cart' %}" class="d-inline">
      <input type="hidden" name="prod_id" value="{{product.id}}" id="prod_id">
-     <button type="submit" class="btn btn-primary shadow px-5 py-2 rounded-pill fw-bold">Add to Cart</button>
+     <button type="submit" class="btn btn-primary shadow px-5 py-2 rounded-pill fw-bold btn-hover-effect">Add to Cart</button>
    </form>
    
-   <a href="{% url 'checkout' %}?prod_id={{product.id}}" class="btn btn-danger shadow px-5 py-2 ms-4 rounded-pill fw-bold">Buy Now</a>
+   <a href="{% url 'checkout' %}?prod_id={{product.id}}" class="btn btn-danger shadow px-5 py-2 ms-2 rounded-pill fw-bold btn-hover-effect">Buy Now</a>
    
    <h5 class="mt-5 fw-bold">Available Offers</h5>
    <ul class="text-muted" style="line-height: 1.8;">
@@ -75,4 +71,34 @@
   </div>
  </div>
 </div>
+
+<!-- પ્રોડક્ટ ડીટેલ પેજ માટેના એનિમેશન અને હોવર ઇફેક્ટ CSS -->
+<style>
+    @keyframes fadeInScale {
+        0% { opacity: 0; transform: scale(0.95); }
+        100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideUp {
+        0% { opacity: 0; transform: translateY(30px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .product-fade-in {
+        animation: fadeInScale 0.8s ease-in-out;
+    }
+
+    .product-slide-up {
+        animation: slideUp 0.8s ease-in-out;
+    }
+
+    .btn-hover-effect {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .btn-hover-effect:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
+    }
+</style>
 {% endblock main-content %}

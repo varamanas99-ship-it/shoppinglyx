@@ -68,6 +68,55 @@
             display: inline-block;
             animation: pulse-animation 1.5s infinite;
         }
+
+        /* --- સોશિયલ મીડિયા આઇકન્સ માટેનું એનિમેશન અને હોવર ઇફેક્ટ --- */
+        .social-icons a {
+            display: inline-block;
+            margin: 0 12px;
+            color: #333;
+            font-size: 22px;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            transform: translateY(-5px) scale(1.2);
+            color: #4a6741; /* તમારી બ્રાન્ડના ગ્રીન કલર મુજબ સેટ કરેલ છે */
+        }
+
+        /* --- આખું પેજ લોડ થાય ત્યારે નીચેથી ઉપર સ્લાઇડ થવાનું એનિમેશન --- */
+        @keyframes pageSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* આ ક્લાસ ઓટોમેટિક દરેક પેજ પર લાગુ થઈ જશે */
+        .container {
+            animation: pageSlideUp 0.8s ease-in-out;
+        }
+
+        /* બટનો અને કાર્ડ પર હોવર ઇફેક્ટ (માઉસ લઈ જતાં સરસ એનિમેશન) */
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+        }
+
+        .btn {
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 
@@ -122,7 +171,6 @@
                     </li>
                     <li class="nav-item mx-2">
                         <a href="{% url 'showcart' %}" class="nav-link">
-                            <!-- અહીં કાર્ટ બેજ પર એનિમેશન ક્લાસ ઉમેરેલ છે -->
                             <span class="badge bg-dark cart-badge-animation">{% if totalitem %}{{ totalitem }}{% else %}0{% endif %}</span> Cart 
                         </a>
                     </li>
@@ -153,6 +201,30 @@
         {% block livesale %}{% endblock livesale %}
         {% block main-content %}{% endblock main-content %}
     </div>
+
+    <!-- Footer Section with Animated Social Icons -->
+    <footer class="text-center text-lg-start bg-light text-muted py-5 mt-5 border-top">
+      <div class="container text-center">
+        <h4 class="fw-bold" style="color: #4a6741;">ShoppingX</h4>
+        <p class="text-muted col-lg-8 mx-auto">
+          ShoppingX – Everything You Need in One Place. Explore stylish fashion and the latest gadgets. Enjoy amazing offers, top quality, and fast delivery. Start shopping today!
+        </p>
+        
+        <!-- Animated Social Media Icons -->
+        <div class="social-icons my-4">
+          <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-pinterest"></i></a>
+        </div>
+        
+        <div class="text-center text-muted small">
+          © 2026 Copyright: <span class="fw-bold text-dark">ShoppingX</span>
+          <p class="mb-0">Designed & Developed by <span class="fw-bold text-dark">Vara Manas</span></p>
+        </div>
+      </div>
+    </footer>
 
     <!-- JavaScript Files -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

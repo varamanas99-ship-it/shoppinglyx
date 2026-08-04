@@ -158,7 +158,6 @@ def add_to_cart(request):
     product_id = request.GET.get('prod_id')
     if product_id:
         product = Product.objects.get(id=product_id)
-        # જો આ પ્રોડક્ટ પહેલેથી કાર્ટમાં હશે તો નવી રો બનવાને બદલે તેની ક્વોન્ટિટી વધી જશે
         cart_item, created = Cart.objects.get_or_create(user=user, product=product)
         if not created:
             cart_item.quantity += 1
@@ -283,7 +282,6 @@ def buy_now(request):
     product_id = request.GET.get('prod_id')
     if product_id:
         product = Product.objects.get(id=product_id)
-        # જો પ્રોડક્ટ પહેલેથી કાર્ટમાં હોય તો તેની ક્વોન્ટિટી એક વધારો અથવા એડ કરો
         cart_item, created = Cart.objects.get_or_create(user=user, product=product)
         if not created:
             cart_item.quantity += 1
@@ -392,6 +390,7 @@ def checkout(request):
             'totalitem': totalitem
         })
 
+
 @login_required
 def payment_done(request):
     user = request.user
@@ -407,9 +406,9 @@ def payment_done(request):
     except Customer.DoesNotExist:
         return redirect('checkout')
         
+    # જો Buy Now થી આવ્યા હોય તો જ માત્ર સિંગલ પ્રોડક્ટ ઓર્ડર થશે, બાકી આખું કાર્ટ ઓર્ડર થશે
     if product_id:
         product = Product.objects.get(id=product_id)
-        # અહીં ચેક કરીશું કે કાર્ટમાં આ પ્રોડક્ટની કેટલી ક્વોન્ટિટી છે
         cart_item = Cart.objects.filter(user=user, product=product).first()
         qty = cart_item.quantity if cart_item else 1
         
@@ -418,7 +417,12 @@ def payment_done(request):
         if cart_item:
             cart_item.delete()
     else:
+        # જો સીધા કાર્ટમાંથી આવ્યા હોય તો કાર્ટની બધી જ આઇટમ્સ ઓર્ડરમાં જશે
         cart = Cart.objects.filter(user=user)
+        if not cart:
+            messages.warning(request, "Your cart is empty!")
+            return redirect('showcart')
+            
         for c in cart:
             OrderPlaced(user=user, customer=customer, product=c.product, quantity=c.quantity, status='Pending').save()
             c.delete() 
@@ -471,3 +475,17 @@ def delete_review(request, id):
     review.delete()
     messages.success(request, 'Your review has been deleted!')
     return redirect('review')
+
+
+def search(request):
+    query = request.GET.get('search', '')
+    product = []
+    totalitem = 0
+    if request.user.is_authenticated:
+        totalitem = Cart.objects.filter(user=request.user).count()
+        
+    if query:
+        product = Product.objects.filter(title__icontains=query)
+    
+    return render(request, 'app/search.html', {'product': product, 'query': query, 'totalitem': totalitem})
+
