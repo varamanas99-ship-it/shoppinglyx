@@ -58,8 +58,7 @@
                                 </span>
                             </div>
                             <p class="mb-1 text-secondary italic">"{{ r.comment }}"</p>
-                            
-                            <!-- 🗑️ ડીલીટ બટન (ફક્ત પોતાના રિવ્યુ માટે) -->
+
                             <div class="d-flex justify-content-between align-items-center mt-2">
                                 <small class="text-muted" style="font-size: 11px;">{{ r.created_at|date:"d M Y" }}</small>
                                 {% if r.user == request.user %}

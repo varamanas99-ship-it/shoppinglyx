@@ -151,7 +151,7 @@ class CustomerProfileForm(forms.ModelForm):
 
 
 # ==========================================================
-# એડમિન પેનલમાં પ્રોડક્ટ એડ કરતી વખતે કેટેગરી મુજબ બ્રાન્ડ વેલિડેટ કરવા માટે
+
 # ==========================================================
 class ProductAdminForm(forms.ModelForm):
     class Meta:
@@ -163,10 +163,10 @@ class ProductAdminForm(forms.ModelForm):
         category = cleaned_data.get("category")
         brand = cleaned_data.get("brand")
 
-        # જો તમે કેટેગરી મોબાઈલ પસંદ કરી હોય અને બ્રાન્ડ લેપટોપ કે બીજા ક્લોધિંગની સિલેક્ટ કરી હોય તો એરર આપશે
+        
         mobile_brands = ['iphone', 'Samsung', 'GooglePixel', 'Apple']
         
-        # નોંધ: તમારા ડેટાબેઝમાં બ્રાન્ડના નામ જે રીતે સેવ હોય તે મુજબ અહીં ચકાસી લેવું
+        
         if category == 'M' and brand and str(brand) not in mobile_brands:
             raise ValidationError("મોબાઈલ કેટેગરી માટે માત્ર મોબાઈલ બ્રાન્ડ જ પસંદ કરો!")
         
